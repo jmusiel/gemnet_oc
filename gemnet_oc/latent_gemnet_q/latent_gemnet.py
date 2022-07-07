@@ -1,49 +1,13 @@
-import logging
-import os
-from typing import Optional, Tuple
 
-import numpy as np
 import torch
 from ocpmodels.common.registry import registry
-from ocpmodels.common.utils import (
-    compute_neighbors,
-    conditional_grad,
-    get_max_neighbors_mask,
-    get_pbc_distances,
-    radius_graph_pbc,
-)
-from torch_geometric.nn import radius_graph
-from torch_scatter import scatter, segment_coo
-from torch_sparse import SparseTensor
+from ocpmodels.common.utils import (conditional_grad)
+from torch_scatter import scatter
 
-from gemnet_oc.gemnet_q.model.initializers import get_initializer
-from gemnet_oc.gemnet_q.model.layers.atom_update_block import OutputBlock
-from gemnet_oc.gemnet_q.model.layers.base_layers import Dense, ResidualLayer
-from gemnet_oc.gemnet_q.model.layers.efficient import BasisEmbedding
-from gemnet_oc.gemnet_q.model.layers.embedding_block import AtomEmbedding, EdgeEmbedding
-from gemnet_oc.gemnet_q.model.layers.force_scaler import ForceScaler
-from gemnet_oc.gemnet_q.model.layers.interaction_block import InteractionBlock
-from gemnet_oc.gemnet_q.model.layers.radial_basis import RadialBasis
-from gemnet_oc.gemnet_q.model.layers.scaling import ScaledModule
-from gemnet_oc.gemnet_q.model.layers.spherical_basis import (
-    CircularBasisLayer,
-    SphericalBasisLayer,
-)
-from gemnet_oc.gemnet_q.model.utils import (
-    get_angle,
-    get_edge_id,
-    get_ragged_idx,
-    inner_product_clamped,
-    mask_neighbors,
-    masked_select_sparsetensor_flat,
-    repeat_blocks,
-)
+from gemnet_oc.gemnet_q.model.utils import (inner_product_clamped, repeat_blocks)
 from gemnet_oc.gemnet_q.model.gemnet import GemNet
-import yaml
 import torch
-from ocpmodels.preprocessing import AtomsToGraphs
 from gemnet_oc.utils.ase_interface import ASEInterface
-from gemnet_oc.utils.load_checkpoint import load_checkpoint
 
 
 @registry.register_model("latent_gemnet_dev")
