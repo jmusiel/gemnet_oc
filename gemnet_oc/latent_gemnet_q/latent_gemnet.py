@@ -122,8 +122,14 @@ class LatentGemNet(GemNet):
 
         residual_list = []
         for E, y in zip(E_list, energy_ground_truths):
-            residual_list.append(y-E)
-        return h_list, residual_list
+            res = y-E
+            residual_list.append(res.detach().numpy()[0])
+
+        latent_list = []
+        for h in h_list:
+            latent = h.detach().numpy().mean(axis=1)
+            latent_list.append(latent)
+        return latent_list, residual_list
 
     @conditional_grad(torch.enable_grad())
     def forward(self, data):
