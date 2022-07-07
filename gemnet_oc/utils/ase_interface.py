@@ -42,6 +42,17 @@ class ASEInterface:
 
     def get_data_from_atoms(self, atoms_list):
         graphs_list = [self.a2g_convert(atoms, False) for atoms in atoms_list]
+        batch_list = [data_list_collater([i_graph], otf_graph=True) for i_graph in graphs_list]
+        return batch_list
+
+    def get_collated_data_from_atoms(self, atoms_list):
+        """
+        Deprecated function, turns atoms list into one batch, 
+        so forward function returns one big tensor for each forward pass.
+        More efficient in some cases, since combines the forward passes
+        But unhelpful when we want to separate each image into its own forward pass
+        """
+        graphs_list = [self.a2g_convert(atoms, False) for atoms in atoms_list]
         data_loader = data_list_collater(graphs_list, otf_graph=True)
 
         assert isinstance(

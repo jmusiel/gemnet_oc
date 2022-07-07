@@ -135,11 +135,11 @@ class LatentGemNet(GemNet):
             **kwargs,
         )
         self.interface = ASEInterface(
-            kwargs.get("cutoff", 6.0),
-            kwargs.get("max_neighbors", 50),
+            kwargs.get("cutoff", 12.0),
+            kwargs.get("max_neighbors", 100),
         )
 
-    def _get_all(self, atoms_list):
+    def get_latent_and_residuals(self, atoms_list, energy_ground_truths):
         h_list = []
         m_list = []
         E_list = []
@@ -157,10 +157,7 @@ class LatentGemNet(GemNet):
             m_list.append(m)
             E_list.append(E_t)
             F_list.append(F_t)
-        return h_list, m_list, E_list, F_list
 
-    def get_latent_and_residuals(self, atoms_list, energy_ground_truths):
-        h_list, m_list, E_list, F_list = self._get_all(atoms_list)
         residual_list = []
         for E, y in zip(E_list, energy_ground_truths):
             residual_list.append(y-E)
