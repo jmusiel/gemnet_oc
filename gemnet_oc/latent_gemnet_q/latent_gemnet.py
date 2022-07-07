@@ -148,9 +148,7 @@ class LatentGemNet(GemNet):
         i = 0
         for data in data_list:
             i+=1
-            print(i)
             E_t, F_t = self.forward(data)
-            print(i)
             h, m = self.latent_h, self.latent_m
             self.latent_h = self.latent_m = None
             h_list.append(h)
