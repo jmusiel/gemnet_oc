@@ -127,7 +127,7 @@ class LatentGemNet(GemNet):
 
         latent_list = []
         for h in h_list:
-            latent = h.detach().numpy()
+            latent = h.detach().numpy().mean(axis=0)
             latent_list.append(latent)
         return latent_list, residual_list
 
