@@ -18,6 +18,8 @@ from ocpmodels.trainers.base_trainer import BaseTrainer
 
 from ocpmodels.trainers.forces_trainer import ForcesTrainer
 from ocpmodels.common.registry import registry
+from gemnet_oc.latent_gemnet_q.latent_gemnet import LatentGemNet
+from ocpmodels.common.data_parallel import OCPDataParallel
 
 @registry.register_trainer("latent")
 class LatentTrainer(ForcesTrainer):
@@ -166,7 +168,11 @@ class LatentTrainer(ForcesTrainer):
         if self.config["model_attributes"].get("regress_forces", True):
             out["forces"] = out_forces
 
-        out["latent_h"] = self.model.module.latent_h.detach().cpu().numpy()
-        self.model.latent_h = self.model.latent_m = None
+        module = self.model.module
+        if type(module) == OCPDataParallel:
+            module = module.module
+        out["latent_h"] = module.latent_h.detach().cpu().numpy()
+
+        module.latent_h = module.latent_m = None
 
         return out
