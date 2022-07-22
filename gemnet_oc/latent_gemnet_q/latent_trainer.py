@@ -127,7 +127,7 @@ class LatentTrainer(ForcesTrainer):
         predictions["id"] = np.array(predictions["id"])
         predictions["latent_h"] = np.array(predictions["latent_h"])
         self.save_results(
-            predictions, results_file, keys=["energy", "forces", "chunk_idx"]
+            predictions, results_file + "_" + str(file_count), keys=["energy", "forces", "chunk_idx", "latent_h", "residual", "n_atoms"]
         )
 
         if self.ema:
