@@ -56,6 +56,7 @@ class LatentTrainer(ForcesTrainer):
 
         predictions = {"id": [], "energy": [], "forces": [], "chunk_idx": [], "latent_h": [], "n_atoms": [], "residual": []}
 
+        file_count = 0
         for i, batch_list in tqdm(
             enumerate(data_loader),
             total=len(data_loader),
@@ -116,6 +117,18 @@ class LatentTrainer(ForcesTrainer):
                 predictions["latent_h"].extend(out["latent_h"].tolist())
                 predictions["n_atoms"].extend(batch_natoms.tolist())
                 predictions["residual"].extend(out["energy"].cpu().numpy() - batch_list[0].y.cpu().numpy())
+
+                if i % 4000 == 0 and i != 0:
+                    predictions["forces"] = np.array(predictions["forces"])
+                    predictions["chunk_idx"] = np.array(predictions["chunk_idx"])
+                    predictions["energy"] = np.array(predictions["energy"])
+                    predictions["id"] = np.array(predictions["id"])
+                    predictions["latent_h"] = np.array(predictions["latent_h"])
+                    self.save_results(
+                        predictions, results_file + "_" + str(file_count), keys=["energy", "forces", "chunk_idx", "latent_h", "residual", "n_atoms"]
+                    )
+                    file_count += 1
+                    predictions = {"id": [], "energy": [], "forces": [], "chunk_idx": [], "latent_h": [], "n_atoms": [], "residual": []}
             else:
                 predictions["energy"] = out["energy"].detach()
                 predictions["forces"] = out["forces"].detach()
