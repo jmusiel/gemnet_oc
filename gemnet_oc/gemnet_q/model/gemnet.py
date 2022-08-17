@@ -37,8 +37,8 @@ from .utils import (
 )
 
 
-@registry.register_model("gemnet_dev")
-@registry.register_model("gemnet_oc")
+# @registry.register_model("gemnet_dev")
+@registry.register_model("gemnet_oc_joe")
 class GemNet(ScaledModule):
     """
     Parameters

@@ -120,7 +120,14 @@ class LatentTrainer(ForcesTrainer):
                 predictions["n_atoms"].extend(batch_natoms.tolist())
                 predictions["residual"].extend(out["energy"].cpu().numpy() - batch_list[0].y.cpu().numpy())
 
-                if i % 4000 == 0 and i != 0:
+                if not hasattr(self, "residual_energies"):
+                    self.residual_energies = []
+                ce = batch_list[0].y.cpu().numpy()
+                pe = out["energy"].cpu().numpy()
+                self.residual_energies.extend(np.abs(pe - ce))
+                print("loop: "+ str(i) +", energy MAE: " + str(np.mean(self.residual_energies)))
+
+                if i % 2000 == 0 and i != 0:
                     predictions["forces"] = np.array(predictions["forces"])
                     predictions["chunk_idx"] = np.array(predictions["chunk_idx"])
                     predictions["energy"] = np.array(predictions["energy"])

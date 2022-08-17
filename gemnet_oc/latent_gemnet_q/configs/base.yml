@@ -3,9 +3,21 @@ trainer: latent
 dataset:
   # - src: /home/jovyan/working/gemnet_oc/gemnet_oc/scratch/lmdb_example
   # - src: /home/jovyan/shared-datasets/OC20/s2ef/all/val_id
-  - src: /home/jovyan/working/gemnet_oc/gemnet_oc/scratch/lmdb_example
-  - src: /home/jovyan/working/gemnet_oc/gemnet_oc/scratch/lmdb_example
-  - src: /home/jovyan/working/gemnet_oc/gemnet_oc/scratch/lmdb_example
+  #   normalize_labels: True
+  #   target_mean: -0.7554450631141663
+  #   target_std: 2.887317180633545
+  #   grad_target_mean: 0.0
+  #   grad_target_std: 2.887317180633545
+  # - src: /home/jovyan/shared-datasets/OC20/s2ef/all/val_id
+  # - src: /home/jovyan/shared-datasets/OC20/s2ef/all/val_id
+  - src: /home/jovyan/shared-datasets/OC20/s2ef/2M/train
+    normalize_labels: True
+    target_mean: -0.7554450631141663
+    target_std: 2.887317180633545
+    grad_target_mean: 0.0
+    grad_target_std: 2.887317180633545
+  - src: /home/jovyan/shared-datasets/OC20/s2ef/2M/train
+  - src: /home/jovyan/shared-datasets/OC20/s2ef/2M/train
 
 logger: tensorboard
 
