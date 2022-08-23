@@ -2,3 +2,4 @@ gemnet_oc.egg-info/
 __pycache__/
 *.pt
 **/scratch/**
+**/temp/**
